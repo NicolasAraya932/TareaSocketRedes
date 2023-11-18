@@ -4,16 +4,17 @@ import threading
 import json
 import re
 
+# Guardar los artefactos
 with open('artefactos.json', 'r') as file:
     _artifacts = json.load(file)
 
 # Protocolos internos de comunicacion cliente-servidor
 p = ["msg", "cmd", "order"]
 
+# Inicializar mutex
 mtx = threading.Lock()
 clientes = []
 
-connection = True
 
 """_summary_
 El servidor se encargara de atender los siguientes protocolos:
@@ -36,7 +37,7 @@ P"Ybmmd"    `Mbmo `Moo9^Yo..JMML.    `Wbmd"MML. `Mbmmd'      W      W         .J
 ''')
 
 def confirmar(name, client_socket):
-    x = input(f"Confirmar nombre: {name} (Y/n)")
+    x = input(f"Nombre elegido: {name}, ¿Es Correcto? (Y/n): ")
     if x == "" or x.lower() == "y":
         client_socket.send(f'{p[2]}\tname\t{name}'.encode('utf-8'))
 
@@ -52,7 +53,6 @@ def confirmar(name, client_socket):
 
                 if subprotocol == 'ack':
                     if body == 'true':
-                        print("CONECTANDO CON EL SERVIDOR")
                         return True
                     else:
                         print("Nombre ya existente. Pruebe con otro.")
@@ -66,41 +66,64 @@ def confirmar(name, client_socket):
 
     
 def set_artifacts(artifacts, client_socket):
-    user_artifacts = list(map(str, re.findall(r'\d+', artifacts)))
-    print(f'Artefactos escogidos:')
-    for a in user_artifacts:
-        print(a, _artifacts[a])
-    
-    x = input(f"Confirmar artefactos? (Y/n)")
+    while True:
+        user_artifacts = list(map(str, re.findall(r'\d+', artifacts)))
+        print(f'Artefactos escogidos:')
+        invalid_artifacts = []
 
-    if x == "" or x.lower() == "y":
-        msg = f'order\tsave_artifact\t{artifacts}'.encode('utf-8')
-        client_socket.send(msg)
+        # Verificamos que la lista tenga artefactos conocidos
+        for a in user_artifacts:
+            artifact_info = _artifacts.get(a)
+            if artifact_info:
+                print(a, _artifacts[a])
+            else:
+                invalid_artifacts.append(a)
+        
+        # Checkeamos que ingrese solamente artefactos que estan en artefactos.json
+        if invalid_artifacts:
+            for invalid_artifact in invalid_artifacts:
+                print(f"[SERVER] El artefacto {invalid_artifact} no existe. Pruebe con artefactos del 1 al 42.")
+            retry = input("¿Desea intentar de nuevo? (Y/n): ")
+            if retry.lower() == 'n':
+                return False
+        # Checkeamos que no ingrese más de 6 artefactos
+        elif len(user_artifacts) > 6:
+            print('[SERVER] Solo se pueden escoger hasta 6 artefactos!')
+            retry = input("¿Desea volver a intentarlo? (Y/n): ")
+            if retry.lower() == 'n':
+                return False
+        # Flujo normal
+        else:
+            x = input(f"Confirmar artefactos? (Y/n): ")
 
-        client_socket.settimeout(None)
+            if x == "" or x.lower() == "y":
+                msg = f'order\tsave_artifact\t{artifacts}'.encode('utf-8')
+                client_socket.send(msg)
 
-        try:
-            ACK = client_socket.recv(1024).decode('utf-8').strip().split("\t")
-            protocol = ACK[0]
+                client_socket.settimeout(None)
 
-            if protocol == 'order':
-                subprotocol = ACK[1]
-                body = ACK[-1]
+                try:
+                    ACK = client_socket.recv(1024).decode('utf-8').strip().split("\t")
+                    protocol = ACK[0]
 
-                if subprotocol == 'ack':
-                    if body == 'true':
-                        print("[SERVER] ¡OK!")
-                        print("¡Bienvenido/a al chat de Granjeros!")
-                        return True
-                    else:
-                        print("[SERVER] Uno o más artefactos no existen.")
-                        return False
+                    if protocol == 'order':
+                        subprotocol = ACK[1]
+                        body = ACK[-1]
 
-        except socket.timeout:
-            print("Timeout: No se recibió respuesta del servidor.")
-            return False
+                        if subprotocol == 'ack':
+                            if body == 'true':
+                                print("[SERVER] ¡OK!")
+                                print("¡Bienvenido/a al chat de Granjeros!")
+                                return True
+                            else:
+                                print("[SERVER] Uno o más artefactos no existen.")
+                                return False
 
-    return False
+                except socket.timeout:
+                    print("Timeout: No se recibió respuesta del servidor.")
+                    return False
+
+        return False
     
 
 def acc_creation(client_socket):
@@ -124,7 +147,6 @@ def acc_creation(client_socket):
             break
         
 def receive_messages(client):
-    global connection
     while True:
         try:
             message = client.recv(1024)
@@ -138,7 +160,6 @@ def receive_messages(client):
                 client.close()
                 break
 
-            
         except Exception as e:
             print(e)
             break
@@ -147,19 +168,19 @@ def receive_messages(client):
 def send_messages(client):
     while True:
         message = input()
-        print("\033[A\033[K", end='', flush=True)  # Move cursor up and clear the line
+        print("\033[A\033[K", end='', flush=True)  
         try:
             if message[0].startswith(":"):
                 message = f'{p[1]}\t{message}'
             
             else:
                 # Se envia un mensaje normal
-                print("YO:", message)
+                print("Yo:", message)
                 message = f'{p[0]}\t{message}'
 
             client.send(message.encode('utf-8'))
         except Exception as e:
-            print("AQUI OCURRO",e)
+            print("ERROR:",e)
             client.close()
             break
         

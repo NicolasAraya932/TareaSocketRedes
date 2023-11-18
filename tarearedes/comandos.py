@@ -1,4 +1,3 @@
-import socket
 import xml.etree.ElementTree as ET
 import threading
 
@@ -8,6 +7,7 @@ tree = ET.parse('comandos.xml')
 
 root = tree.getroot()
 
+# Muestra en pantalla lista de comandos
 def help(client_socket):
     with open("comandos.txt", mode='r', encoding='utf-8') as f:
         for line in f:
@@ -26,17 +26,19 @@ def send_private_message(sender, recipient_socket, message):
     except ValueError:
         print('[SERVER] Usuario destinatario no encontrado.')
 
+# Envio de mensajes a los demás clientes
 def broadcast(message, _client, clients):
     for client in clients.values():
         if client.nombre != _client:
             client.client_socket.send(message)
 
+# Mostrar artefactos del usuario
 def show_artifacts(current_user):
     current_user.client_socket.send(f'[SERVER] Tus artefactos son:'.encode('utf-8'))
     for key, artifact in current_user.artefactos.items():
         current_user.client_socket.send(f'---- {key} {artifact}\n'.encode('utf-8'))
 
-
+# Mostrar artefacto solicitado por ID
 def get_artifact(artefact_id, artifacts, current_user):
     try:
         print(artifacts[artefact_id], current_user)
