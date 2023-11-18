@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+
+<commands>
+    <command>
+    	<id>0</id>
+        <name>:?</name>
+        <arguments></arguments>
+        <description>Muestra los comandos disponibles.</description>
+    </command>
+    <command>
+    	<id>1</id>
+        <name>:q</name>
+        <arguments></arguments>
+        <description>Permite que el usuario se desconecte del chat.</description>
+    </command>
+    <command>
+    	<id>2</id>
+        <name>:p</name>
+        <arguments>&lt;Identificador&gt; &lt;Mensaje&gt;</arguments>
+        <description>Envía un mensaje privado al usuario especificado por &lt;Identificador&gt;. Este mensaje solo debe ser recibido por este usuario, y desplegado en su chat.</description>
+    </command>
+    <command>
+    	<id>3</id>
+        <name>:u</name>
+        <arguments></arguments>
+        <description>Muestra los identificadores de los usuarios que se encuentran conectados actualmente al chat.</description>
+    </command>
+    <command>
+    	<id>4</id>
+        <name>:smile</name>
+        <arguments></arguments>
+        <description>Envía la carita feliz :)</description>
+    </command>
+    <command>
+    	<id>5</id>
+        <name>:angry</name>
+        <arguments></arguments>
+        <description>Envía la carita enojada >:(</description>
+    </command>
+    <command>
+    	<id>6</id>
+        <name>:combito</name>
+        <arguments></arguments>
+        <description>Envía un emoticón bélico Q(’- ’Q)</description>
+    </command>
+    <command>
+    	<id>7</id>
+        <name>:larva</name>
+        <arguments></arguments>
+        <description>Envía una Larva (:o)OOOooo</description>
+    </command>
+    <command>
+    	<id>8</id>
+        <name>:artefactos</name>
+        <arguments></arguments>
+        <description>Entrega una lista de los artefactos que el usuario tiene en su cuenta. Esta información solo es visible por quien envía el comando.</description>
+    </command>
+    <command>
+    	<id>9</id>
+        <name>:artefacto</name>
+        <arguments>&lt;ArtefactoId&gt;</arguments>
+        <description>Obtiene el nombre del artefacto identificado por ArtefactoId. Por ejemplo, :artefacto 22 es respondido por el servidor con Trocitos de cristal. Esta información solo es visible por quien envía el comando.</description>
+    </command>
+    <command>
+    	<id>9</id>
+        <name>:offer</name>
+        <arguments>&lt;Identificador&gt; &lt;MiArtefactoId&gt; &lt;SuArtefactoId&gt;</arguments>
+        <description>Este comando inicia un intercambio con el usuario &lt;Identificador&gt;. A este usuario se le ofrece &lt;MiArtefactoId&gt; a cambio de &lt;SuArtefactoId&gt;. Por ejemplo, :offer Gus 32 12 equivale a querer intercambiar una Espuela prehistórica por el Disco raro de Gus.</description>
+    </command>
+    <command>
+    	<id>10</id>
+        <name>:accept</name>
+        <arguments></arguments>
+        <description>Acepta la oferta recibida y realiza el intercambio de artefactos, actualizando las listas de artefactos de cada usuario involucrado. En ambos chats se muestra ¡Intercambio realizado!</description>
+    </command>
+    <command>
+    	<id>11</id>
+        <name>:reject</name>
+        <arguments></arguments>
+        <description>Rechaza la oferta. En ambos chats involucrados se muestra Intercambio rechazado.</description>
+    </command>
+</commands>

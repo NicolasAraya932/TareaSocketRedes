@@ -1,0 +1,14 @@
+:?	Muestra los comandos disponibles.
+:h	Muestra los comandos disponibles.
+:help	Muestra los comandos disponibles.
+:q	Permite que el usuario se desconecte del chat.
+:p <Identificador> <Mensaje>	Envia un mensaje privado al usuario especificado por ¡Identificador!. Este mensaje solo debe ser recibido por este usuario, y desplegado en su chat.
+:u	Muestra los identificadores de los usuarios que se encuentran conectados actualmente al chat.
+:smile	Envia la carita feliz :)
+:angry	Envia la carita enojada >:(
+:combito	Envia un emoticon belico Q(’- ’Q)
+:larva	Envia una Larva (:o)OOOooo
+:artefactos	Entrega una lista de los artefactos que el usuario tiene en su cuenta. Esta informacion solo es visible por quien envia el comando. :artefacto <ArtefactoId>	Obtiene el nombre del artefacto identificado por ArtefactoId. Por ejemplo, :artefacto 22 es respondido por el servidor con Trocitos de cristal. Esta informacion solo es visible por quien envia el comando.
+:offer <Identificador> <MiArtefactoId> <SuArtefactoId>	Este comando inicia un intercambio con el usuario <Identificador>. A este usuario se le ofrece <MiArtefactoId> a cambio de <SuArtefactoId>. Por ejemplo, :offer Gus 32 12 equivale a querer intercambiar una Espuela prehistorica por el Disco raro de Gus.
+:accept	Acepta la oferta recibida y realiza el intercambio de artefactos, actualizando las listas de artefactos de cada usuario involucrado. En ambos chats se muestra ¡Intercambio realizado!
+:reject	Rechaza la oferta. En ambos chats involucrados se muestra Intercambio rechazado.
